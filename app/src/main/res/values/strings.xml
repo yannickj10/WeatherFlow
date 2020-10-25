@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">WeatherFlow</string>
+    <string name="city_header">%1$s</string>
+    <string name="temperature">%1$s °C</string>
+    <string name="humidity">Humidity: %1$s \%%</string>
+    <string name="windSpeed">Wind speed: %1$s km/h</string>
+</resources>
