@@ -1,20 +1,22 @@
 package fr.ippon.weatherflow.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import fr.ippon.weatherflow.R
 import fr.ippon.weatherflow.db.CityWeather
-import fr.ippon.weatherflow.repository.Resource
-import fr.ippon.weatherflow.repository.Status
 import fr.ippon.weatherflow.model.CityWeatherViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import fr.ippon.weatherflow.repository.Status
 import kotlinx.android.synthetic.main.main_activity.*
-import kotlin.math.log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,19 +28,8 @@ class MainActivity : AppCompatActivity() {
 
     private val cityWeathers: MutableList<CityWeather> = mutableListOf()
 
-    private val updateCityWeather = Observer<Resource<Array<CityWeather>>> {
-        refreshCityWeathersList(it.data ?: emptyArray())
-
-        when (it.status) {
-            Status.SUCCESS -> {
-                this@MainActivity.swipe_refresh.isRefreshing = false
-            }
-            Status.ERROR -> {
-                Toast.makeText(this@MainActivity, it.throwable?.message, Toast.LENGTH_SHORT).show()
-                this@MainActivity.swipe_refresh.isRefreshing = false
-            }
-            Status.LOADING -> this@MainActivity.swipe_refresh.isRefreshing = true
-        }
+    private val updateCityWeather = Observer<Array<CityWeather>> {
+        refreshCityWeathersList(it ?: emptyArray())
     }
 
     private fun refreshCityWeathersList(newCityWeathers: Array<CityWeather>) {
@@ -66,9 +57,28 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        this.cityWeatherViewModel.fetchCityWeathers()
+        refreshCityWeathers()
+
         this.swipe_refresh.setOnRefreshListener {
-            this.cityWeatherViewModel.fetchCityWeathers()
+            refreshCityWeathers()
+        }
+    }
+
+    private fun refreshCityWeathers() = lifecycleScope.launch(Dispatchers.Default) {
+        cityWeatherViewModel.fetchCityWeathers().await().collect { displayRequestStatus(it) }
+    }
+
+    private suspend fun displayRequestStatus(status: Status) = withContext(Dispatchers.Main) {
+        when (status) {
+            Status.SUCCESS -> {
+                this@MainActivity.swipe_refresh.isRefreshing = false
+                Toast.makeText(this@MainActivity, "Succès", Toast.LENGTH_SHORT).show()
+            }
+            Status.ERROR -> {
+                Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_SHORT).show()
+                this@MainActivity.swipe_refresh.isRefreshing = false
+            }
+            Status.LOADING -> this@MainActivity.swipe_refresh.isRefreshing = true
         }
     }
 

@@ -26,7 +26,7 @@ class ConfigurationTest: KoinTest {
                 listOf(
                     daoModule,
                     databaseTestModule,
-                    deserializerModule,
+                    apiModule,
                     jsonModule,
                     repositoryModule,
                     viewModelModule

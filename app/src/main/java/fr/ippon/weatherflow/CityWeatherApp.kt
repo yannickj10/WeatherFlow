@@ -26,7 +26,7 @@ class CityWeatherApp : Application() {
                 listOf(
                     daoModule,
                     databaseModule,
-                    deserializerModule,
+                    apiModule,
                     jsonModule,
                     repositoryModule,
                     viewModelModule
