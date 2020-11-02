@@ -3,6 +3,7 @@ package fr.ippon.weatherflow.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.asLiveData
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.coroutines.awaitObjectResult
 import fr.ippon.weatherflow.api.CityWeatherResultDeserializer
@@ -29,7 +30,7 @@ class CityWeatherRepository constructor(
     }
 
     private fun subscribeToDatabase() {
-        val sourceDb = cityWeatherDao.getAll()
+        val sourceDb = cityWeatherDao.getAll().asLiveData()
         _cityWeathers.postValue(Resource.loading(emptyArray()))
 
         _cityWeathers.addSource(sourceDb) {
