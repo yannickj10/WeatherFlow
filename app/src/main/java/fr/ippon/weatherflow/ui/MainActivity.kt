@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import fr.ippon.weatherflow.R
 import fr.ippon.weatherflow.db.CityWeather
-import fr.ippon.weatherflow.model.CityWeatherViewModel
+import fr.ippon.weatherflow.viewmodel.CityWeatherViewModel
 import fr.ippon.weatherflow.repository.Status
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.Dispatchers

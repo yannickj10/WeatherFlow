@@ -1,6 +1,6 @@
 package fr.ippon.weatherflow.di
 
-import fr.ippon.weatherflow.model.CityWeatherViewModel
+import fr.ippon.weatherflow.viewmodel.CityWeatherViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
