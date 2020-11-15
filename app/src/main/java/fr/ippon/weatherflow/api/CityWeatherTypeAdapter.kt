@@ -60,6 +60,6 @@ class CityWeatherTypeAdapter : JsonDeserializer<CityWeather> {
             .get(SPEED)
             .asDouble.times(3.6)
 
-        return CityWeather(id, cityName, weatherPrecision, String.format("%.2f", temperature).toDouble(), humidity, windSpeed)
+        return CityWeather(id, cityName, weatherPrecision, String.format("%.2f", temperature).toDouble(), humidity, String.format("%.2f", windSpeed).toDouble())
     }
 }

@@ -72,13 +72,16 @@ class MainActivity : AppCompatActivity() {
         when (status) {
             Status.SUCCESS -> {
                 this@MainActivity.swipe_refresh.isRefreshing = false
-                Toast.makeText(this@MainActivity, "Succès", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Success", Toast.LENGTH_SHORT).show()
             }
             Status.ERROR -> {
                 Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_SHORT).show()
                 this@MainActivity.swipe_refresh.isRefreshing = false
             }
-            Status.LOADING -> this@MainActivity.swipe_refresh.isRefreshing = true
+            Status.LOADING -> {
+                Toast.makeText(this@MainActivity, "Loading", Toast.LENGTH_SHORT).show()
+                this@MainActivity.swipe_refresh.isRefreshing = true
+            }
         }
     }
 
